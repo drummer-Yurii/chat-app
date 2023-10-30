@@ -15,7 +15,16 @@
       <h1>Welcome, {{ state.username }}</h1>
     </header>
     <section class="chat-box">
-      // Messages
+      <div
+        v-for="message in state.messages"
+        :key="message.key"
+        :class="message.username == state.username ? 'message current-user' : 'message'"
+      >
+        <div class="message-inner">
+          <div class="username">{{ message.username }}</div>
+          <div class="content">{{ message.content }}</div>
+        </div>
+      </div>
     </section>
     <footer>
       <form @submit.prevent="SendMessage">
@@ -45,10 +54,10 @@ export default {
         state.username = inputUsername.value;
         inputUsername.value = '';
       }
-    }
+    };
 
     const SendMessage = () => {
-      const messagesRef = db.database().ref("messages");
+      const messagesRef = db.database().ref('messages');
 
       if (inputMessage.value === '' || inputMessage.value === null) {
         return;
@@ -57,11 +66,29 @@ export default {
       const message = {
         username: state.username,
         content: inputMessage.value,
-      }
+      };
 
       messagesRef.push(message);
       inputMessage.value = '';
-    }
+    };
+
+    onMounted(() => {
+      const messagesRef = db.database().ref('messages');
+      messagesRef.on('value', (snapshot) => {
+        const data = snapshot.val();
+        let messages = [];
+
+        Object.keys(data).forEach((key) => {
+          messages.push({
+            id: key,
+            username: data[key].username,
+            content: data[key].content,
+          });
+        });
+
+        state.messages = messages;
+      });
+    });
     return {
       inputUsername,
       inputMessage,

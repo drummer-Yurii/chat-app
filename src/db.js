@@ -1,5 +1,5 @@
-import * as firebase from 'firebase/app';
-import 'firebase/database';
+import firebase from 'firebase/compat/app';
+import 'firebase/compat/database';
 
 const config = {
   apiKey: 'AIzaSyCKULywReT4SnAsTXuq4CnfprF9AB5CKaI',

@@ -18,8 +18,8 @@
       // Messages
     </section>
     <footer>
-      <form @submit.prevent="">
-        <input type="text" placeholder="Write a message..." />
+      <form @submit.prevent="SendMessage">
+        <input type="text" v-model="inputMessage" placeholder="Write a message..." />
         <input type="submit" value="Send" />
       </form>
     </footer>
@@ -33,6 +33,7 @@ export default {
   name: 'App',
   setup() {
     const inputUsername = ref('');
+    const inputMessage = ref('');
 
     const state = reactive({
       username: '',
@@ -45,9 +46,27 @@ export default {
         inputUsername.value = '';
       }
     }
+
+    const SendMessage = () => {
+      const messagesRef = db.database().ref("messages");
+
+      if (inputMessage.value === '' || inputMessage.value === null) {
+        return;
+      }
+
+      const message = {
+        username: state.username,
+        content: inputMessage.value,
+      }
+
+      messagesRef.push(message);
+      inputMessage.value = '';
+    }
     return {
       inputUsername,
+      inputMessage,
       Login,
+      SendMessage,
       state,
     };
   },

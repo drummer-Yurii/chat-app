@@ -10,7 +10,19 @@
     </form>
   </div>
   <div class="view chat" v-else>
-    <h1>Chat View</h1>
+    <header>
+      <button class="logout">Logout</button>
+      <h1>Welcome, {{ state.username }}</h1>
+    </header>
+    <section class="chat-box">
+      // Messages
+    </section>
+    <footer>
+      <form @submit.prevent="">
+        <input type="text" placeholder="Write a message..." />
+        <input type="submit" value="Send" />
+      </form>
+    </footer>
   </div>
 </template>
 
